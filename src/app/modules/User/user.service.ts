@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
 import config from '../../config';
 import prisma from '../../shared/prisma';
-import { generateToken } from '../Auth/auth.utils';
 import { Prisma, User, UserRole, UserStatus } from '@prisma/client';
 import AppError from '../../error/AppError';
 import status from 'http-status';
+import { generateToken } from '../../utils/useToken';
 
 const registerUser = async (data: Prisma.UserCreateInput) => {
   const isUserExist = await prisma.user.findUnique({
