@@ -1,0 +1,9 @@
+node_modules
+.env
+dist
+.vercel
+src/app/modules/
+
+# modules/auth/
+# !modules/
+
