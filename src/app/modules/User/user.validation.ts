@@ -1,4 +1,3 @@
-
 import { z } from 'zod';
 
 const createUserValidationSchema = z.object({
@@ -27,6 +26,17 @@ const createTrainerValidationSchema = z.object({
   }),
 });
 
+const updateUserValidationSchema = z.object({
+  body: z.object({
+    name: z.string({ required_error: 'Name is required!' }).optional(),
+    email: z
+      .string({ required_error: 'Email is required!' })
+      .email({ message: 'Must be a valid email address' })
+      .optional(),
+    profileImage: z.string().url().optional(),
+  }),
+});
+
 const loginValidationSchema = z.object({
   body: z.object({
     email: z
@@ -42,4 +52,5 @@ export const userValidation = {
   createUserValidationSchema,
   createTrainerValidationSchema,
   loginValidationSchema,
+  updateUserValidationSchema
 };

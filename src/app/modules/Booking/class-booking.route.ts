@@ -10,5 +10,6 @@ const router = Router();
 router.post('/create-booking', ClassBookingControllers.createClassBooking);
 router.delete('/cancel-booking', ClassBookingControllers.cancelClassBooking);
 
+router.get('/my-bookings', auth(UserRole.TRAINEE), ClassBookingControllers.getMyBookings);
 export const ClassBookingRoutes = router;
  

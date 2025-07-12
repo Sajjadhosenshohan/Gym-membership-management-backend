@@ -2,9 +2,10 @@ import status from 'http-status';
 import prisma from '../../shared/prisma';
 import { classScheduleValidation } from './class-schedule.validation';
 import AppError from '../../error/AppError';
+import { paginationHelper } from '../../helpers/paginationHelpers';
+import { IPaginationOptions } from '../../interface/pagination';
 
 const createScheduleService = async (payload: any) => {
-
   const { date, startTime, trainerId } = payload;
 
   const dateTimeString = `${date}T${startTime}:00`; // first get this type format ==>> YYYY-MM-DDTHH:MM
@@ -81,13 +82,54 @@ const createScheduleService = async (payload: any) => {
   return result;
 };
 
-const getAllSchedulesService = async () => {
-  return await prisma.classSchedule.findMany({
-    include: { trainer: true, bookings: true },
+const getAvailableSchedulesService = async (options: IPaginationOptions) => {
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(options);
+
+  const result = await prisma.classSchedule.findMany({
+    include: {
+      trainer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          profileImage: true,
+          createdAt: true,
+        },
+      },
+      _count: {
+        select: { bookings: true },
+      },
+      bookings: true,
+    },
+    where: {
+      bookings: {
+      },
+    },
+    skip,
+    take: limit,
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
   });
+
+  const availableSchedules = result.filter(
+    (schedule) => schedule._count.bookings < 10
+  );
+
+  return {
+    meta: {
+      page,
+      limit,
+      total: availableSchedules.length,
+    },
+    data: availableSchedules,
+  };
 };
+
 
 export const ClassScheduleService = {
   createScheduleService,
-  getAllSchedulesService,
+  getAvailableSchedulesService,
 };

@@ -75,7 +75,15 @@ const cancelBookingService = async (bookingId: string, traineeId: string) => {
   });
 };
 
+const getMyBookings = async (traineeId: string) => {
+  return await prisma.booking.findMany({
+    where: { traineeId },
+    include: { classSchedule: true },
+  });
+};
+
 export const ClassBookingService = {
   createClassBooking,
   cancelBookingService,
+  getMyBookings
 };

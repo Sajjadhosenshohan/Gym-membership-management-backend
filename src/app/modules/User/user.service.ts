@@ -124,6 +124,15 @@ const getAllTrainers = async (options: IPaginationOptions) => {
 
   const result = await prisma.user.findMany({
     where: conditions,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      profileImage: true,
+      createdAt: true,
+      updatedAt: true,
+    },
     skip,
     take: limit,
     orderBy: {
@@ -143,12 +152,68 @@ const getAllTrainers = async (options: IPaginationOptions) => {
 
 const deleteTrainer = async (trainerId: string) => {
   const result = await prisma.$transaction(async (tx) => {
-    const trainer = await tx.user.findUnique({ where: { id: trainerId } });
+    const trainer = await tx.user.findUnique({
+      where: {
+        id: trainerId,
+        role: UserRole.TRAINER,
+        userStatus: UserStatus.ACTIVE,
+      },
+    });
 
     if (!trainer || trainer.role !== UserRole.TRAINER) {
       throw new AppError(status.NOT_FOUND, 'Trainer not found');
     }
-    return await tx.user.delete({ where: { id: trainerId } });
+    return await tx.user.update({
+      where: { id: trainerId },
+      data: { userStatus: UserStatus.DELETED },
+    });
+  });
+
+  return result;
+};
+
+const getMyProfile = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId, userStatus: UserStatus.ACTIVE },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      profileImage: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  if (!user) throw new AppError(status.NOT_FOUND, 'User not found');
+  return user;
+};
+
+const updateMyProfile = async (userId: string, data: any) => {
+  const { role, ...restData } = data;
+
+  const result = await prisma.$transaction(async (tx) => {
+    const user = await tx.user.findUnique({
+      where: { id: userId, userStatus: UserStatus.ACTIVE },
+    });
+
+    if (!user) throw new AppError(status.NOT_FOUND, 'User not found');
+
+    const updatedUserInfo = await tx.user.update({
+      where: { id: userId, userStatus: UserStatus.ACTIVE },
+      data: { ...restData },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        profileImage: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return updatedUserInfo;
   });
 
   return result;
@@ -160,4 +225,6 @@ export const UserService = {
   loginUser,
   getAllTrainers,
   deleteTrainer,
+  getMyProfile,
+  updateMyProfile,
 };

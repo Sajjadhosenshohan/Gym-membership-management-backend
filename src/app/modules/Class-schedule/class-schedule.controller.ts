@@ -2,6 +2,7 @@ import status from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { ClassScheduleService } from './class-schedule.service';
+import pick from '../../shared/pick';
 
 const createSchedule = catchAsync(async (req, res) => {
   const result = await ClassScheduleService.createScheduleService(req.body);
@@ -14,7 +15,8 @@ const createSchedule = catchAsync(async (req, res) => {
   });
 });
 const getAllSchedulesService = catchAsync(async (req, res) => {
-  const result = await ClassScheduleService.getAllSchedulesService();
+  const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
+  const result = await ClassScheduleService.getAvailableSchedulesService(options);
 
   sendResponse(res, {
     statusCode: status.OK,
@@ -26,5 +28,5 @@ const getAllSchedulesService = catchAsync(async (req, res) => {
 
 export const ClassScheduleControllers = {
   createSchedule,
-  getAllSchedulesService
+  getAllSchedulesService,
 };

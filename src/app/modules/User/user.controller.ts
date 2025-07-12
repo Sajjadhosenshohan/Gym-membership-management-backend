@@ -37,7 +37,7 @@ const loginUser = catchAsync(async (req, res) => {
   });
 });
 
-export const getAllTrainers = catchAsync(async (req, res) => {
+const getAllTrainers = catchAsync(async (req, res) => {
   const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
 
   const result = await UserService.getAllTrainers(options);
@@ -49,13 +49,35 @@ export const getAllTrainers = catchAsync(async (req, res) => {
   });
 });
 
-export const deleteTrainer = catchAsync(async (req, res) => {
+const deleteTrainer = catchAsync(async (req, res) => {
   const trainerId = req.params.id;
-  const result = await UserService.deleteTrainer(trainerId);
+  await UserService.deleteTrainer(trainerId);
   sendResponse(res, {
     statusCode: status.OK,
     success: true,
     message: 'Trainer deleted successfully',
+    data: null,
+  });
+});
+
+const getMyProfile = catchAsync(async (req, res) => {
+  const userId = req.user?.id;
+  const result = await UserService.getMyProfile(userId);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Profile retrieved successfully',
+    data: result,
+  });
+});
+
+const updateMyProfile = catchAsync(async (req, res) => {
+  const userId = req.user?.id;
+  const result = await UserService.updateMyProfile(userId, req.body);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Profile updated successfully',
     data: result,
   });
 });
@@ -66,4 +88,6 @@ export const UserControllers = {
   loginUser,
   getAllTrainers,
   deleteTrainer,
+  getMyProfile,
+  updateMyProfile,
 };

@@ -5,7 +5,10 @@ import { ClassBookingService } from './class-booking.service';
 
 const createClassBooking = catchAsync(async (req, res) => {
   const { classScheduleId, traineeId } = req.body;
-  const result = await ClassBookingService.createClassBooking(classScheduleId, traineeId);
+  const result = await ClassBookingService.createClassBooking(
+    classScheduleId,
+    traineeId,
+  );
 
   sendResponse(res, {
     statusCode: status.OK,
@@ -15,9 +18,11 @@ const createClassBooking = catchAsync(async (req, res) => {
   });
 });
 const cancelClassBooking = catchAsync(async (req, res) => {
-
   const { bookingId, traineeId } = req.body;
-  const result = await ClassBookingService.cancelBookingService(bookingId, traineeId);
+  const result = await ClassBookingService.cancelBookingService(
+    bookingId,
+    traineeId,
+  );
 
   sendResponse(res, {
     statusCode: status.OK,
@@ -27,7 +32,19 @@ const cancelClassBooking = catchAsync(async (req, res) => {
   });
 });
 
+const getMyBookings = catchAsync(async (req, res) => {
+  const traineeId = req.user?.id;
+  const result = await ClassBookingService.getMyBookings(traineeId);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Bookings retrieved successfully',
+    data: result,
+  });
+});
+
 export const ClassBookingControllers = {
   createClassBooking,
-  cancelClassBooking
+  cancelClassBooking,
+  getMyBookings
 };

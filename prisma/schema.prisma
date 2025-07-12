@@ -9,20 +9,20 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
+  id           String  @id @default(uuid())
+  name         String
+  email        String  @unique
+  password     String
   profileImage String?
-  
+
   userStatus UserStatus @default(ACTIVE)
-  role      UserRole @default(TRAINEE)
+  role       UserRole   @default(TRAINEE)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  trainerClassSchedules ClassSchedule[] 
-  traineeBookings  Booking[]
+  trainerClassSchedules ClassSchedule[]
+  traineeBookings       Booking[]
 }
 
 enum UserStatus {
@@ -48,6 +48,7 @@ model ClassSchedule {
 
   bookings  Booking[]
   createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@index([date])
 }
@@ -56,10 +57,12 @@ model Booking {
   id              String   @id @default(uuid())
   traineeId       String
   classScheduleId String
-  createdAt       DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   trainee       User          @relation(fields: [traineeId], references: [id])
   classSchedule ClassSchedule @relation(fields: [classScheduleId], references: [id])
+
 
   @@unique([traineeId, classScheduleId])
 }

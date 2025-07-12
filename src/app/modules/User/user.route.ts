@@ -44,7 +44,33 @@ router.post(
   UserControllers.loginUser,
 );
 
-router.get('/users/trainers', auth(UserRole.ADMIN), UserControllers.getAllTrainers);
-router.delete('/users/trainers/:id', auth(UserRole.ADMIN), UserControllers.deleteTrainer);
+// get all trainers & delete
+router.get('/trainers',  UserControllers.getAllTrainers);
 
+router.delete(
+  '/trainers/:id',
+  auth(UserRole.ADMIN),
+  UserControllers.deleteTrainer,
+);
+
+// profile get and update
+router.get(
+  '/me',
+  auth(UserRole.TRAINEE, UserRole.TRAINER, UserRole.ADMIN),
+  UserControllers.getMyProfile,
+);
+router.put(
+  '/me',
+  auth(UserRole.TRAINEE, UserRole.TRAINER, UserRole.ADMIN),
+  multerUpload.single('file'),
+  validationRequest(userValidation.updateUserValidationSchema),
+  (req: Request, res: Response, next: NextFunction) => {
+    const file = req.file;
+
+    if (file) {
+      req.body.profileImage = file.path;
+    }
+    UserControllers.updateMyProfile(req, res, next);
+  },
+);
 export const UserRoutes = router;
