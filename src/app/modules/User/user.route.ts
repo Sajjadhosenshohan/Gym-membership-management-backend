@@ -44,4 +44,7 @@ router.post(
   UserControllers.loginUser,
 );
 
+router.get('/users/trainers', auth(UserRole.ADMIN), UserControllers.getAllTrainers);
+router.delete('/users/trainers/:id', auth(UserRole.ADMIN), UserControllers.deleteTrainer);
+
 export const UserRoutes = router;

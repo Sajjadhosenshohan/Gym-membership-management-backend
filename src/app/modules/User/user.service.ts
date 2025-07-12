@@ -5,12 +5,14 @@ import { Prisma, User, UserRole, UserStatus } from '@prisma/client';
 import AppError from '../../error/AppError';
 import status from 'http-status';
 import { generateToken } from '../../utils/useToken';
+import { IPaginationOptions } from '../../interface/pagination';
+import { paginationHelper } from '../../helpers/paginationHelpers';
 
 const registerUser = async (data: Prisma.UserCreateInput) => {
   const isUserExist = await prisma.user.findUnique({
     where: {
       email: data.email,
-      userStatus: UserStatus.ACTIVE
+      userStatus: UserStatus.ACTIVE,
     },
   });
 
@@ -18,7 +20,6 @@ const registerUser = async (data: Prisma.UserCreateInput) => {
     throw new AppError(status.CONFLICT, 'User already exist');
   }
 
-  
   const hashedPassword = await bcrypt.hash(
     data.password as string,
     Number(config.BCRYPT_SALt_ROUNDS),
@@ -53,10 +54,7 @@ const registerUser = async (data: Prisma.UserCreateInput) => {
 
 // user create
 const createUser = async (data: User) => {
-  if (
-    data.role === UserRole.ADMIN ||
-    data.role === UserRole.TRAINER
-  ) {
+  if (data.role === UserRole.ADMIN || data.role === UserRole.TRAINER) {
     throw new AppError(status.UNAUTHORIZED, 'Unauthorized to create this role');
   }
 
@@ -111,12 +109,55 @@ const loginUser = async (payload: { email: string; password: string }) => {
   );
 
   return {
-    accessToken
+    accessToken,
   };
+};
+
+const getAllTrainers = async (options: IPaginationOptions) => {
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(options);
+
+  const conditions = {
+    role: UserRole.TRAINER,
+    userStatus: UserStatus.ACTIVE,
+  };
+
+  const result = await prisma.user.findMany({
+    where: conditions,
+    skip,
+    take: limit,
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
+  });
+  const total = await prisma.user.count({ where: conditions });
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
+};
+
+const deleteTrainer = async (trainerId: string) => {
+  const result = await prisma.$transaction(async (tx) => {
+    const trainer = await tx.user.findUnique({ where: { id: trainerId } });
+
+    if (!trainer || trainer.role !== UserRole.TRAINER) {
+      throw new AppError(status.NOT_FOUND, 'Trainer not found');
+    }
+    return await tx.user.delete({ where: { id: trainerId } });
+  });
+
+  return result;
 };
 
 export const UserService = {
   createUser,
   createTrainer,
-  loginUser
+  loginUser,
+  getAllTrainers,
+  deleteTrainer,
 };

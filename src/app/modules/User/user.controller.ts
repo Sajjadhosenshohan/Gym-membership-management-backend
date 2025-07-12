@@ -37,8 +37,33 @@ const loginUser = catchAsync(async (req, res) => {
   });
 });
 
+export const getAllTrainers = catchAsync(async (req, res) => {
+  const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
+
+  const result = await UserService.getAllTrainers(options);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Trainers retrieved successfully',
+    data: result,
+  });
+});
+
+export const deleteTrainer = catchAsync(async (req, res) => {
+  const trainerId = req.params.id;
+  const result = await UserService.deleteTrainer(trainerId);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Trainer deleted successfully',
+    data: result,
+  });
+});
+
 export const UserControllers = {
   createUser,
   createTrainer,
-  loginUser
+  loginUser,
+  getAllTrainers,
+  deleteTrainer,
 };
