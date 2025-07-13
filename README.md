@@ -196,8 +196,8 @@ model Booking {
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/your-username/gym-schedule-backend.git
-cd gym-schedule-backend
+git clone https://github.com/Sajjadhosenshohan/Gym-membership-management-backend
+cd Gym-membership-management-backend
 
 # 2. Install dependencies
 npm install
@@ -224,7 +224,7 @@ Password: 123456
 
 ## 🌍 Live Hosting Link
 
-👉 [https://your-deployment-link.com](https://your-deployment-link.com)
+👉 [https://gym-schedule-and-booking-management.vercel.app](https://gym-schedule-and-booking-management.vercel.app)
 
 
 ## 📬 Postman Documentation
