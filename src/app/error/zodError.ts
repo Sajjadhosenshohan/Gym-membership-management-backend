@@ -4,13 +4,13 @@ import httpStatus from "http-status";
 interface SimplifiedZodError {
   statusCode: number;
   message: string;
-  error: Array<{ path: string; message: string }>;
+  error: Array<{ field: string; message: string }>;
 }
 
 export const handleZodError = (err: ZodError): SimplifiedZodError => {
   const ZodError = err.issues.map((issue) => {
     return {
-      path: issue.path.join(">>>"),
+      field: issue.path.join(">>>"),
       message: issue.message,
     };
   });

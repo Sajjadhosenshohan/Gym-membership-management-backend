@@ -5,7 +5,7 @@ const createUserValidationSchema = z.object({
     name: z.string({ required_error: 'Name is required!' }),
     email: z
       .string({ required_error: 'Email is required!' })
-      .email({ message: 'Must be a valid email address' }),
+      .email({ message:  "Invalid email format." }),
     password: z
       .string({ required_error: 'Password is required!' })
       .min(6, 'Password must be at least 6 characters long'),
@@ -18,7 +18,7 @@ const createTrainerValidationSchema = z.object({
     name: z.string({ required_error: 'Name is required!' }),
     email: z
       .string({ required_error: 'Email is required!' })
-      .email({ message: 'Must be a valid email address' }),
+      .email({ message:  "Invalid email format." }),
     password: z
       .string({ required_error: 'Password is required!' })
       .min(6, 'Password must be at least 6 characters long'),
@@ -31,7 +31,7 @@ const updateUserValidationSchema = z.object({
     name: z.string({ required_error: 'Name is required!' }).optional(),
     email: z
       .string({ required_error: 'Email is required!' })
-      .email({ message: 'Must be a valid email address' })
+      .email({ message:  "Invalid email format." })
       .optional(),
     profileImage: z.string().url().optional(),
   }),
@@ -41,7 +41,7 @@ const loginValidationSchema = z.object({
   body: z.object({
     email: z
       .string({ required_error: 'Email is required!' })
-      .email({ message: 'Must be a valid email address' }),
+      .email({ message:  "Invalid email format." }),
     password: z
       .string({ required_error: 'Password is required!' })
       .min(6, 'Password must be at least 6 characters long'),

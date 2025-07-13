@@ -18,12 +18,12 @@ export const createClassBooking = async (
     });
 
     if (!classSchedule) {
-      throw new AppError(status.NOT_FOUND, 'Class not found');
+      throw new AppError(status.NOT_FOUND, 'Class schedule is not found');
     }
 
     // Check if class is full or not
     if (classSchedule.bookings.length >= 10) {
-      throw new AppError(status.BAD_REQUEST, 'Class schedule is full');
+      throw new AppError(status.BAD_REQUEST, "Class schedule is full. Maximum 10 trainees allowed per schedule.");
     }
 
     // Check if this trainee already has a class at same start time

@@ -31,7 +31,7 @@ const createScheduleService = async (payload: any) => {
     });
 
     if (!trainer) {
-      throw new AppError(status.NOT_FOUND, 'Trainer not found');
+      throw new AppError(status.NOT_FOUND, "Trainer isn't found");
     }
 
     // Check daily schedule limit
@@ -42,7 +42,7 @@ const createScheduleService = async (payload: any) => {
     if (existingSchedules.length >= 5) {
       throw new AppError(
         status.BAD_REQUEST,
-        'Daily schedule limit (5) reached',
+        "Schedule limit exceeded. You can only create 5 schedules per day.",
       );
     }
 

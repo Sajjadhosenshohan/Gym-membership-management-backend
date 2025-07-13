@@ -12,7 +12,7 @@ const auth = (...roles: string[]) => {
     try {
       const token: string = req.headers.authorization!;
       if (!token) {
-        throw new AppError(status.UNAUTHORIZED, 'You are not authorized!');
+        throw new AppError(status.UNAUTHORIZED, "Unauthorized access. You must be an admin to perform this action.");
       }
 
       const verifyUser = verifyToken(
@@ -21,7 +21,7 @@ const auth = (...roles: string[]) => {
       );
 
       if (roles.length && !roles.includes(verifyUser.role)) {
-        throw new AppError(status.UNAUTHORIZED, 'You are not authorized!');
+        throw new AppError(status.UNAUTHORIZED, "Unauthorized access. You must be an admin to perform this action.");
       }
 
       const userData = await prisma.user.findUnique({

@@ -55,7 +55,10 @@ const registerUser = async (data: Prisma.UserCreateInput) => {
 // user create
 const createUser = async (data: User) => {
   if (data.role === UserRole.ADMIN || data.role === UserRole.TRAINER) {
-    throw new AppError(status.UNAUTHORIZED, 'Unauthorized to create this role');
+    throw new AppError(
+      status.UNAUTHORIZED,
+      'Unauthorized access. You must be an admin to perform this action.',
+    );
   }
 
   return await registerUser(data);
