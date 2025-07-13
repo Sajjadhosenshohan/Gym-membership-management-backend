@@ -8,7 +8,7 @@ const app: Application = express();
 
 const corseOptions = {
   origin: [
-    'http://localhost:3000'
+    '*'
   ],
   credentials: true,
 };
@@ -25,7 +25,7 @@ app.use('/api', router);
 app.get('/', (req: Request, res: Response) => {
   res.send({
     status: true,
-    message: 'AR Bazar server is running..!',
+    message: 'Gym Management System API is Running..!',
   });
 });
 
