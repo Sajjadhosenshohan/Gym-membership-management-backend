@@ -217,10 +217,19 @@ npm run dev
 ```
 
 
-## 🔐 Admin Credentials
+## 🔐 User Credentials
 
-Email: admin@gmail.com 
-Password: 123456
+### ✅ Admin
+- **Email:** `admin@gmail.com`  
+- **Password:** `123456`
+
+### 🧑‍🏫 Trainer
+- **Email:** `trainer@gmail.com`  
+- **Password:** `123456`
+
+### 🧑‍🎓 Trainee
+- **Email:** `trainee@gmail.com`  
+- **Password:** `123456`
 
 
 
