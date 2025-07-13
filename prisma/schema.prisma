@@ -48,7 +48,7 @@ model ClassSchedule {
 
   bookings  Booking[]
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime?  @updatedAt
 
   @@index([date])
 }
@@ -58,7 +58,7 @@ model Booking {
   traineeId       String
   classScheduleId String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime? @updatedAt 
 
   trainee       User          @relation(fields: [traineeId], references: [id])
   classSchedule ClassSchedule @relation(fields: [classScheduleId], references: [id])

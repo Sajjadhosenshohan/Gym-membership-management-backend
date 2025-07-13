@@ -10,7 +10,6 @@ const router = Router();
 
 router.post(
   '/register-user',
-  auth(UserRole.ADMIN, UserRole.TRAINEE),
   multerUpload.single('file'),
   validationRequest(userValidation.createUserValidationSchema),
   (req: Request, res: Response, next: NextFunction) => {
@@ -46,7 +45,6 @@ router.post(
 
 // get all trainers & delete
 router.get('/trainers',  UserControllers.getAllTrainers);
-
 router.delete(
   '/trainers/:id',
   auth(UserRole.ADMIN),

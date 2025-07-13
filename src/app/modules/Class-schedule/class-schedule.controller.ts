@@ -26,7 +26,21 @@ const getAllSchedulesService = catchAsync(async (req, res) => {
   });
 });
 
+const getTrainerSchedules = catchAsync(async (req, res) => {
+  const userId = req.user?.id;
+   const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
+
+  const result = await ClassScheduleService.getTrainerSchedulesService(userId, options);
+
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Trainer class schedules fetched successfully',
+    data: result
+  });
+});
 export const ClassScheduleControllers = {
   createSchedule,
   getAllSchedulesService,
+  getTrainerSchedules
 };

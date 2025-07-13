@@ -4,7 +4,9 @@ import sendResponse from '../../utils/sendResponse';
 import { ClassBookingService } from './class-booking.service';
 
 const createClassBooking = catchAsync(async (req, res) => {
-  const { classScheduleId, traineeId } = req.body;
+  const { classScheduleId } = req.body;
+  const traineeId = req.user?.id;
+
   const result = await ClassBookingService.createClassBooking(
     classScheduleId,
     traineeId,
@@ -18,7 +20,8 @@ const createClassBooking = catchAsync(async (req, res) => {
   });
 });
 const cancelClassBooking = catchAsync(async (req, res) => {
-  const { bookingId, traineeId } = req.body;
+  const { bookingId } = req.body;
+  const traineeId = req.user?.id;
   const result = await ClassBookingService.cancelBookingService(
     bookingId,
     traineeId,

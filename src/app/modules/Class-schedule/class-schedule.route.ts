@@ -10,4 +10,6 @@ const router = Router();
 router.post('/', auth(UserRole.ADMIN), ClassScheduleControllers.createSchedule);
 router.get('/',  ClassScheduleControllers.getAllSchedulesService);
 
+router.get('/my-schedules', auth(UserRole.TRAINER), ClassScheduleControllers.getTrainerSchedules);
+
 export const ClassScheduleRoutes = router;

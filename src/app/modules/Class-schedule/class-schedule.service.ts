@@ -104,8 +104,7 @@ const getAvailableSchedulesService = async (options: IPaginationOptions) => {
       bookings: true,
     },
     where: {
-      bookings: {
-      },
+      bookings: {},
     },
     skip,
     take: limit,
@@ -115,7 +114,7 @@ const getAvailableSchedulesService = async (options: IPaginationOptions) => {
   });
 
   const availableSchedules = result.filter(
-    (schedule) => schedule._count.bookings < 10
+    (schedule) => schedule._count.bookings < 10,
   );
 
   return {
@@ -129,7 +128,65 @@ const getAvailableSchedulesService = async (options: IPaginationOptions) => {
 };
 
 
+const getTrainerSchedulesService = async (
+  userId: string,
+  options: IPaginationOptions
+) => {
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(options);
+
+  const result = await prisma.classSchedule.findMany({
+    where: {
+      trainerId: userId,
+    },
+    include: {
+      trainer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          profileImage: true,
+        },
+      },
+      bookings: {
+        include: {
+          trainee: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              profileImage: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: { bookings: true },
+      },
+    },
+    skip,
+    take: limit,
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
+  });
+
+  const total = await prisma.classSchedule.count({
+    where: { trainerId: userId },
+  });
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
+};
+
 export const ClassScheduleService = {
   createScheduleService,
   getAvailableSchedulesService,
+  getTrainerSchedulesService
 };
