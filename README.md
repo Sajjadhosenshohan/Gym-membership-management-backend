@@ -17,7 +17,9 @@ A system that:
 
 ## 🔗 Relational Diagram
 
-![Relational Diagram](https://res.cloudinary.com/djzt5tkwu/image/upload/v1752412592/er-diagram_gsiryl.png) <!-- Replace with actual image path or link -->
+🔗 [Click here to view ER-Diagram](https://lucid.app/lucidchart/965e1b01-eb33-43e7-8397-ae0c43951f09/edit?invitationId=inv_b60f47e3-3675-48ef-858e-a7f53cbcb353)
+
+[![Relational Diagram](https://res.cloudinary.com/djzt5tkwu/image/upload/v1752412592/er-diagram_gsiryl.png)](https://res.cloudinary.com/djzt5tkwu/image/upload/v1752412592/er-diagram_gsiryl.png)
 
 ---
 
@@ -229,7 +231,7 @@ Password: 123456
 
 ## 📬 Postman Documentation
 
-📄 [View Postman Collection](https://www.postman.com/bongodevs-1923/workspace/gym-management-backend/collection/37579050-dc92312c-58ee-4ae2-b786-ffdf23e2bd43?action=share&creator=37579050)
+📄 [View Postman Collection](https://www.postman.com/bongodevs-1923/workspace/gym-management-api/collection/37579050-94a6529f-21f1-4101-a8eb-49368960929c?action=share&creator=37579050)
 
 
 ## 🧪 Testing Instructions
